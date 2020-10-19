@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -20,6 +20,8 @@ func main() {
 	r := mux.NewRouter()
 	// Add your routes as needed
 	r.HandleFunc("/", handler)
+	r.HandleFunc("/submission", acceptSubmission).Methods("POST")
+	r.HandleFunc("/submission", getSubmission).Methods("GET")
 
 	srv := &http.Server{
 		Addr: "0.0.0.0:8080",
@@ -56,11 +58,4 @@ func main() {
 	// to finalize based on context cancellation.
 	log.Println("shutting down")
 	os.Exit(0)
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "%s %s %s\n", r.Method, r.URL, r.Proto)
-	for k, v := range r.Header {
-		fmt.Fprintf(w, "Header[%d] = %q\n", k, v)
-	}
 }
