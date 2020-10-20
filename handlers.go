@@ -19,3 +19,11 @@ func acceptSubmission(w http.ResponseWriter, r *http.Request) {
 func getSubmission(w http.ResponseWriter, r *http.Request) {
 
 }
+
+func getUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func createUser(w http.ResponseWriter, r *http.Request) {
+
+}
