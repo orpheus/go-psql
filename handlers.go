@@ -1,8 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
+
+	"github.com/orpheus/wsd/persistence"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -12,18 +15,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func acceptSubmission(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func getSubmission(w http.ResponseWriter, r *http.Request) {
-
-}
-
 func getUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func createUser(w http.ResponseWriter, r *http.Request) {
-
+func createUser(db *sql.DB) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		newUser := &persistence.User{
+			ID: 1,
+			FirstName: "Ryan",
+			LastName: "Chacon",
+			Email: "ryan.gnar@yahoo.com",
+		}
+		persistence.SaveUser(db, newUser)
+	}
 }

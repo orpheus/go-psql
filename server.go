@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"flag"
 	"log"
 	"net/http"
@@ -10,12 +11,12 @@ import (
 	"time"
 )
 
-func startServer() {
+func startServer(db *sql.DB) {
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
 
-	r := createRouter()
+	r := createRouter(db)
 
 	srv := &http.Server{
 		Addr: "0.0.0.0:7777",
