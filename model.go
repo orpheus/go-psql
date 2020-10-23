@@ -1,3 +1,5 @@
+// model.go
+
 package main
 
 import (
@@ -5,9 +7,9 @@ import (
 )
 
 type product struct {
-	ID    int     `json:"id"'`
+	ID    int     `json:"id"`
 	Name  string  `json:"name"`
-	Price float64 `json:"price''"`
+	Price float64 `json:"price"`
 }
 
 func (p *product) getProduct(db *sql.DB) error {
@@ -24,7 +26,7 @@ func (p *product) updateProduct(db *sql.DB) error {
 }
 
 func (p *product) deleteProduct(db *sql.DB) error {
-	_, err := db.Exec("DELETE FROM products where id=$1", p.ID)
+	_, err := db.Exec("DELETE FROM products WHERE id=$1", p.ID)
 
 	return err
 }
@@ -34,12 +36,16 @@ func (p *product) createProduct(db *sql.DB) error {
 		"INSERT INTO products(name, price) VALUES($1, $2) RETURNING id",
 		p.Name, p.Price).Scan(&p.ID)
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func getProducts(db *sql.DB, start, count int) ([]product, error) {
 	rows, err := db.Query(
-		"SELECT id, name, price FROM products LIMIT $1 OFFSET $2",
+		"SELECT id, name,  price FROM products LIMIT $1 OFFSET $2",
 		count, start)
 
 	if err != nil {
@@ -48,7 +54,9 @@ func getProducts(db *sql.DB, start, count int) ([]product, error) {
 
 	defer rows.Close()
 
-	var products []product
+	products := []product{}
+	// why does this not work but line 57 does?
+	// var products []product
 
 	for rows.Next() {
 		var p product
@@ -57,5 +65,6 @@ func getProducts(db *sql.DB, start, count int) ([]product, error) {
 		}
 		products = append(products, p)
 	}
+
 	return products, nil
 }
