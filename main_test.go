@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 		os.Getenv("APP_DB_USERNAME"),
 		os.Getenv("APP_DB_PASSWORD"),
 		os.Getenv("APP_DB_NAME"))
-	//
+
 	ensureTableExists()
 
 	code := m.Run()
@@ -91,9 +91,10 @@ func TestGetNonExistentProduct(t *testing.T) {
 }
 
 func TestCreateProduct(t *testing.T) {
+
 	clearTable()
 
-	var jsonStr = []byte(`{"name":"test product", "price": 11.22`)
+	var jsonStr = []byte(`{"name":"test product", "price": 11.22}`)
 	req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 
