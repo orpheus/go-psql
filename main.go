@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -31,6 +32,12 @@ func (a *App) Initialize(user, password, dbname string) {
 }
 
 func (a *App) Run(addr string) {}
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Print("no .env file found")
+	}
+}
 
 func main() {
 	a := App{}
