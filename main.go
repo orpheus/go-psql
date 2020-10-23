@@ -2,23 +2,41 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 )
 
-type Service struct {
+type App struct {
 	Router *mux.Router
 	DB     *sql.DB
 }
 
-func (a *Service) Initialize(user, password, dbname string) { }
+func (a *App) Initialize(user, password, dbname string) {
+	connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
+		user, password, dbname)
 
-func (a *Service) Run(addr string) { }
+	fmt.Println("DB Connection String:", connectionString)
+	var err error
+	a.DB, err = sql.Open("postgres", connectionString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("DB Connection Success.")
+	a.Router = mux.NewRouter()
+	log.Println("Router created.")
+}
+
+func (a *App) Run(addr string) {}
 
 func main() {
-	s := Service{}
-	s.Initialize("postgres","postgres", "wsdb")
-	s.Run(":7777")
-
-	//db := connectToPostgresDb()
-	//startServer(db)
+	a := App{}
+	a.Initialize(
+		os.Getenv("APP_DB_USERNAME"),
+		os.Getenv("APP_DB_PASSWORD"),
+		os.Getenv("APP_DB_NAME"))
+	a.Run(":7777")
 }

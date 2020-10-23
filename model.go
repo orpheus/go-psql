@@ -5,11 +5,10 @@ import (
 	"errors"
 )
 
-
 type product struct {
-	ID    int     `json:"id"`
+	ID    int     `json:"id"'`
 	Name  string  `json:"name"`
-	Price float64 `json:"price"`
+	Price float64 `json:"price''"`
 }
 
 func (p *product) getProduct(db *sql.DB) error {
